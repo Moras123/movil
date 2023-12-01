@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
+import 'basededatos.dart';
 
 class BusquedaScreen extends StatefulWidget {
   @override
@@ -67,13 +68,26 @@ class _BusquedaScreenState extends State<BusquedaScreen> {
       for (TextBlock block in visionText.blocks) {
         for (TextLine line in block.lines) {
           for (TextElement element in line.elements) {
-            print(element.text);
+            // Llama a la función para insertar en la base de datos
+            await _insertData(element.text!);
           }
         }
       }
     } catch (e) {
       print('Error processing image: $e');
     }
+  }
+
+  Future<void> _insertData(String detectedPlate) async {
+    final registro = {
+      'nombre': 'Nombre predeterminado',
+      'direccion': 'Dirección predeterminada',
+      'telefono': 'Teléfono predeterminado',
+      'marcaAuto': 'Marca predeterminada',
+      'placa': detectedPlate,
+    };
+
+    await insertRegistro(registro);
   }
 
   @override

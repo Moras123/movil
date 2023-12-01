@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
+import 'basededatos.dart';
 
 class RegistroScreen extends StatefulWidget {
   @override
@@ -60,26 +59,13 @@ class _RegistroScreenState extends State<RegistroScreen> {
   }
 
   Future<void> _insertData() async {
-    final Database database = await openDatabase(
-      join(await getDatabasesPath(), 'registro_database.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE registros(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, direccion TEXT, telefono TEXT, marcaAuto TEXT, placa TEXT)',
-        );
-      },
-      version: 1,
-    );
-
-    await database.insert(
-      'registros',
-      {
-        'nombre': nombreController.text,
-        'direccion': direccionController.text,
-        'telefono': telefonoController.text,
-        'marcaAuto': marcaAutoController.text,
-        'placa': placaController.text,
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+    final registro = {
+      'nombre': nombreController.text,
+      'direccion': direccionController.text,
+      'telefono': telefonoController.text,
+      'marcaAuto': marcaAutoController.text,
+      'placa': placaController.text,
+    };
+    await insertRegistro(registro);
   }
 }

@@ -1,7 +1,12 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+
 
 Future<void> initDatabase() async {
+  // Ensure that the databaseFactoryFfi is set before opening the database
+  databaseFactory = databaseFactoryFfi;
+
   final Database database = await openDatabase(
     join(await getDatabasesPath(), 'registro_database.db'),
     onCreate: (db, version) {
